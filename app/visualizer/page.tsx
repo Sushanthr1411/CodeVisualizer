@@ -99,10 +99,10 @@ function renderUI() {}
     <div className="min-h-screen bg-background text-foreground">
       <Header />
       
-      <main className="flex h-[calc(100vh-80px)]">
+      <main className="flex flex-col md:flex-row h-auto md:h-[calc(100vh-80px)]">
         
         {/* LEFT PANEL */}
-        <div className="w-1/2 border-r border-border/30 p-6 overflow-hidden flex flex-col">
+        <div className="w-full md:w-1/2 border-b md:border-b-0 md:border-r border-border/30 p-4 md:p-6 flex flex-col">
           <div className="mb-4">
             <h2 className="text-lg font-semibold mb-2">Code Input</h2>
             <p className="text-sm text-muted-foreground mb-4">
@@ -110,9 +110,13 @@ function renderUI() {}
             </p>
           </div>
 
-          <CodeEditor code={code} onChange={setCode} />
+          <CodeEditor
+            code={code}
+            onChange={setCode}
+            className="text-sm md:text-base"
+          />
 
-          <div className="flex gap-3 mt-6">
+          <div className="flex flex-col md:flex-row gap-3 mt-6">
             <Button 
               onClick={handleVisualize} 
               disabled={!code.trim()} 
@@ -132,30 +136,37 @@ function renderUI() {}
         </div>
 
         {/* RIGHT PANEL */}
-        <div className="w-1/2 p-6 overflow-hidden flex flex-col bg-muted/20">
-          <div className="mb-4 flex justify-between items-center">
+        <div className="w-full md:w-1/2 p-4 md:p-6 flex flex-col bg-muted/20 gap-4">
+          
+          {/* HEADER + BUTTON */}
+          <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-3">
             <div>
-              <h2 className="text-lg font-semibold mb-1">Code Graph</h2>
+              <h2 className="text-lg font-semibold">Code Graph</h2>
               <p className="text-sm text-muted-foreground">
                 Interactive visualization of your code structure
               </p>
             </div>
 
-            {/* 🔥 DOWNLOAD BUTTON */}
             <Button onClick={handleDownload}>
               ⬇ Download
             </Button>
           </div>
 
-          {/* 🔥 WRAPPED GRAPH */}
-          <div ref={graphRef} className="flex-1">
-            <GraphVisualization 
-              code={code} 
-              showGraph={showGraph} 
-              nodes={nodes}
-              edges={edges}
-            />
+          {/* GRAPH */}
+          <div 
+            ref={graphRef} 
+            className="flex-1 min-h-[250px] md:min-h-0 flex items-center justify-center"
+          >
+            <div className="w-full bg-card rounded-xl p-3 md:p-4 shadow-sm">
+              <GraphVisualization 
+                code={code} 
+                showGraph={showGraph} 
+                nodes={nodes}
+                edges={edges}
+              />
+            </div>
           </div>
+
         </div>
 
       </main>
