@@ -1,6 +1,7 @@
 'use client';
 
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import CodeEditor from '@/components/code-editor';
 import GraphVisualization from '@/components/graph-visualization';
@@ -14,6 +15,18 @@ export default function Home() {
   const [nodes, setNodes] = useState([]);
   const [edges, setEdges] = useState([]);
   const graphRef = useRef<HTMLDivElement | null>(null);
+
+  const router = useRouter();
+
+  // 🔥 SMART REDIRECT (ONLY ON REFRESH)
+  useEffect(() => {
+    const navEntries = performance.getEntriesByType("navigation") as PerformanceNavigationTiming[];
+    const navType = navEntries[0]?.type;
+
+    if (navType === "reload") {
+      router.replace("/");
+    }
+  }, [router]);
 
   const handleVisualize = () => {
     if (code.trim()) {
@@ -31,7 +44,7 @@ export default function Home() {
     try {
       const dataUrl = await toPng(graphRef.current, {
         cacheBust: true,
-        backgroundColor: '#0f0c29', // dark bg for clean export
+        backgroundColor: '#0f0c29',
       });
 
       const link = document.createElement('a');
