@@ -18,7 +18,7 @@ export default function Home() {
 
   const router = useRouter();
 
-  // ✅ FIXED RELOAD HANDLING (NO GLITCH)
+  // ✅ Reload fix
   useEffect(() => {
     const isReload = sessionStorage.getItem("isReload");
 
@@ -47,7 +47,6 @@ export default function Home() {
     }
   };
 
-  // 🔥 DOWNLOAD FUNCTION
   const handleDownload = async () => {
     if (!graphRef.current) return;
 
@@ -66,7 +65,6 @@ export default function Home() {
     }
   };
 
-  // 🔥 SAMPLE CODE
   const handleLoadSample = () => {
     const sampleCode = `// User Authentication Flow Example
 
@@ -96,27 +94,33 @@ function renderUI() {}
   };
 
   return (
-    <div className="min-h-screen bg-background text-foreground">
-      <Header />
+    <div className="h-screen flex flex-col bg-background text-foreground overflow-hidden">
       
-      <main className="flex flex-col md:flex-row h-auto md:h-[calc(100vh-80px)]">
-        
+      <Header />
+
+      {/* 🔥 FULL HEIGHT SPLIT */}
+      <main className="flex flex-col md:flex-row flex-1 overflow-hidden">
+
         {/* LEFT PANEL */}
-        <div className="w-full md:w-1/2 border-b md:border-b-0 md:border-r border-border/30 p-4 md:p-6 flex flex-col">
+        <div className="w-full md:w-1/2 border-b md:border-b-0 md:border-r border-border/30 p-4 md:p-6 flex flex-col overflow-hidden">
+
           <div className="mb-4">
             <h2 className="text-lg font-semibold mb-2">Code Input</h2>
-            <p className="text-sm text-muted-foreground mb-4">
+            <p className="text-sm text-muted-foreground">
               Paste your JavaScript code here to visualize its structure
             </p>
           </div>
 
-          <CodeEditor
-            code={code}
-            onChange={setCode}
-            className="text-sm md:text-base"
-          />
+          {/* ✅ FIXED EDITOR (NO SHRINK) */}
+          <div className="flex-1 flex flex-col overflow-hidden bg-card rounded-xl p-2">
+            <CodeEditor
+              code={code}
+              onChange={setCode}
+              className="flex-1 text-sm md:text-base"
+            />
+          </div>
 
-          <div className="flex flex-col md:flex-row gap-3 mt-6">
+          <div className="flex flex-col md:flex-row gap-3 mt-4">
             <Button 
               onClick={handleVisualize} 
               disabled={!code.trim()} 
@@ -136,14 +140,14 @@ function renderUI() {}
         </div>
 
         {/* RIGHT PANEL */}
-        <div className="w-full md:w-1/2 p-4 md:p-6 flex flex-col bg-muted/20 gap-4">
-          
-          {/* HEADER + BUTTON */}
-          <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-3">
+        <div className="w-full md:w-1/2 p-4 md:p-6 flex flex-col bg-muted/20 overflow-hidden">
+
+          {/* HEADER */}
+          <div className="flex justify-between items-center mb-4">
             <div>
               <h2 className="text-lg font-semibold">Code Graph</h2>
               <p className="text-sm text-muted-foreground">
-                Interactive visualization of your code structure
+                Interactive visualization
               </p>
             </div>
 
@@ -152,19 +156,17 @@ function renderUI() {}
             </Button>
           </div>
 
-          {/* GRAPH */}
-          <div 
-            ref={graphRef} 
-            className="flex-1 min-h-[250px] md:min-h-0 flex items-center justify-center"
+          {/* ✅ FULL HEIGHT GRAPH */}
+          <div
+            ref={graphRef}
+            className="flex-1 overflow-hidden rounded-xl bg-card"
           >
-            <div className="w-full bg-card rounded-xl p-3 md:p-4 shadow-sm">
-              <GraphVisualization 
-                code={code} 
-                showGraph={showGraph} 
-                nodes={nodes}
-                edges={edges}
-              />
-            </div>
+            <GraphVisualization 
+              code={code} 
+              showGraph={showGraph} 
+              nodes={nodes}
+              edges={edges}
+            />
           </div>
 
         </div>
