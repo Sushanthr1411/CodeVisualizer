@@ -13,7 +13,7 @@ const getLayoutedElements = (nodes: any[], edges: any[]) => {
   dagreGraph.setDefaultEdgeLabel(() => ({}));
 
   dagreGraph.setGraph({
-    rankdir: 'TB', // Top → Bottom layout
+    rankdir: 'TB',
     nodesep: 80,
     ranksep: 120,
   });
@@ -57,11 +57,11 @@ export default function GraphVisualization({
     );
   }
 
-  // 🔥 PREPARE NODES (NO MANUAL POSITIONING)
+  // 🔥 PREPARE NODES
   const rfNodes = nodes.map((n: any) => ({
     id: n.id,
     data: { label: n.data?.label || n.id },
-    position: { x: 0, y: 0 }, // dagre will handle this
+    position: { x: 0, y: 0 },
     style: {
       background: 'linear-gradient(135deg, #6366f1, #8b5cf6)',
       color: 'white',
@@ -86,20 +86,27 @@ export default function GraphVisualization({
     },
   }));
 
-  // 🔥 APPLY DAGRE AUTO-LAYOUT
+  // 🔥 APPLY DAGRE
   const { nodes: layoutedNodes, edges: layoutedEdges } =
     getLayoutedElements(rfNodes, rfEdges);
 
   return (
-    <div className="w-full h-full rounded-xl overflow-hidden border bg-background">
-      <ReactFlow
-        nodes={layoutedNodes}
-        edges={layoutedEdges}
-        fitView
-      >
-        <Background />
-        <Controls />
-      </ReactFlow>
+    // 🔥 IMPORTANT FIX (NO FIXED HEIGHT HERE)
+    <div className="w-full h-full min-h-[300px] rounded-xl overflow-hidden border bg-background">
+      
+      {/* 🔥 CRITICAL: ReactFlow MUST fill parent */}
+      <div className="w-full h-full">
+        <ReactFlow
+          nodes={layoutedNodes}
+          edges={layoutedEdges}
+          fitView
+          style={{ width: '100%', height: '100%' }} // 💥 KEY FIX
+        >
+          <Background />
+          <Controls />
+        </ReactFlow>
+      </div>
+
     </div>
   );
 }

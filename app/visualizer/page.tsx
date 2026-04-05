@@ -111,7 +111,7 @@ function renderUI() {}
             </p>
           </div>
 
-          {/* ✅ FIXED EDITOR (NO SHRINK) */}
+          {/* ✅ FIXED EDITOR */}
           <div className="flex-1 flex flex-col overflow-hidden bg-card rounded-xl p-2">
             <CodeEditor
               code={code}
@@ -156,10 +156,10 @@ function renderUI() {}
             </Button>
           </div>
 
-          {/* ✅ FULL HEIGHT GRAPH */}
+          {/* 🔥 FINAL FIX: MOBILE HEIGHT */}
           <div
             ref={graphRef}
-            className="flex-1 overflow-hidden rounded-xl bg-card"
+            className="w-full h-[350px] md:h-full flex-1 overflow-hidden rounded-xl bg-card"
           >
             <GraphVisualization 
               code={code} 
