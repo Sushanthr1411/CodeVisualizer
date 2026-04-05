@@ -18,14 +18,24 @@ export default function Home() {
 
   const router = useRouter();
 
-  // 🔥 SMART REDIRECT (ONLY ON REFRESH)
+  // ✅ FIXED RELOAD HANDLING (NO GLITCH)
   useEffect(() => {
-    const navEntries = performance.getEntriesByType("navigation") as PerformanceNavigationTiming[];
-    const navType = navEntries[0]?.type;
+    const isReload = sessionStorage.getItem("isReload");
 
-    if (navType === "reload") {
+    if (isReload === "true") {
+      sessionStorage.removeItem("isReload");
       router.replace("/");
     }
+
+    const handleBeforeUnload = () => {
+      sessionStorage.setItem("isReload", "true");
+    };
+
+    window.addEventListener("beforeunload", handleBeforeUnload);
+
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+    };
   }, [router]);
 
   const handleVisualize = () => {
