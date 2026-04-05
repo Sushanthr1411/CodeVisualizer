@@ -46,6 +46,11 @@ It helps developers quickly understand how functions are connected without manua
 
 ---
 
+## 🌐 Live Demo
+https://code-visualizer-seven.vercel.app/
+
+---
+
 ## 🧠 How It Works
 
 1. User inputs JavaScript code
